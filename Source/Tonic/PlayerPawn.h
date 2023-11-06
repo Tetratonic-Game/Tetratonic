@@ -23,7 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void DisplaceCharacter(const FVector NormalizedDirection);
+	void DisplacePawn(const FVector NormalizedDirection);
 
 	UFUNCTION(BlueprintCallable)
 	void ReturnToOrigin();
@@ -43,4 +43,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* UpAction;
+
+	UPROPERTY(EditAnywhere)
+	FVector OriginPosition = FVector(0, 0, 0);
+
+	UPROPERTY(EditAnywhere)
+	float InputDisplacement = 100;
 };

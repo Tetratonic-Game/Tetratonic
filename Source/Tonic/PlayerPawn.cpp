@@ -39,24 +39,16 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayerPawn::DisplaceCharacter(const FVector NormalizedDirection)
+void APlayerPawn::DisplacePawn(const FVector NormalizedDirection)
 {
-	//UE_LOG(LogTemp, Display, TEXT("Called DisplaceCharacter"));
-	const float InputDisplacement = 100.0f;
-	const FVector Origin = FVector(0.0f, 0.0f, 1.0f);
-
 	UStaticMeshComponent* PlayerMesh = GetPlayerMesh();
-	//UE_LOG(LogTemp, Display, TEXT("%s"), *PlayerMesh->GetName());
-	PlayerMesh->SetRelativeLocation((NormalizedDirection * InputDisplacement) + Origin);
+	PlayerMesh->SetRelativeLocation((NormalizedDirection * InputDisplacement) + OriginPosition);
 }
 
 void APlayerPawn::ReturnToOrigin()
 {
-	//UE_LOG(LogTemp, Display, TEXT("Called ReturnToOrigin"));
-	const FVector Origin = FVector(0.0f, 0.0f, 1.0f);
-
 	UStaticMeshComponent* PlayerMesh = GetPlayerMesh();
-	PlayerMesh->SetRelativeLocation(Origin);
+	PlayerMesh->SetRelativeLocation(OriginPosition);
 }
 
 UStaticMeshComponent* APlayerPawn::GetPlayerMesh() const
