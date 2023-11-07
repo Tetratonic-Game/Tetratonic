@@ -17,6 +17,7 @@ void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Score = StartingScore;
 	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -57,6 +58,18 @@ UStaticMeshComponent* APlayerPawn::GetPlayerMesh() const
 	
 	return PlayerMesh;
 }
+
+int32 APlayerPawn::GetScore() const
+{
+	return Score;
+}
+
+void APlayerPawn::SetScore(const int32 NewScore)
+{
+	Score = NewScore;
+	UE_LOG(LogTemp, Display, TEXT("New player score: %d"), Score);
+}
+
 
 
 
