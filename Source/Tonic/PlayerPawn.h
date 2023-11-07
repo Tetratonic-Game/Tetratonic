@@ -35,6 +35,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetScore() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetScore(const int32 NewScore);
+
+
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	
@@ -45,8 +52,13 @@ private:
 	UInputAction* UpAction;
 
 	UPROPERTY(EditAnywhere)
+	int32 StartingScore = 100;
+
+	UPROPERTY(EditAnywhere)
 	FVector OriginPosition = FVector(0, 0, 0);
 
 	UPROPERTY(EditAnywhere)
 	float InputDisplacement = 100;
+	
+	int32 Score;
 };
