@@ -41,7 +41,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 }
 
 void APlayerPawn::DisplacePawn(const FVector NormalizedDirection)
-{
+{w
 	UStaticMeshComponent* PlayerMesh = GetPlayerMesh();
 	PlayerMesh->SetRelativeLocation((NormalizedDirection * InputDisplacement) + OriginPosition);
 }
