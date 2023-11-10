@@ -41,7 +41,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetScore(const int32 NewScore);
 
-
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	

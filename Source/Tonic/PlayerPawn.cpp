@@ -3,6 +3,7 @@
 #include "PlayerPawn.h"
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystems.h"
+#include "TrackGameMode.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -69,7 +70,3 @@ void APlayerPawn::SetScore(const int32 NewScore)
 	Score = NewScore;
 	UE_LOG(LogTemp, Display, TEXT("New player score: %d"), Score);
 }
-
-
-
-
