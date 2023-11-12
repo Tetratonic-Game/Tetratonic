@@ -18,6 +18,8 @@ class TONIC_API ATrackGameMode : public AGameModeBase
 
 protected:
     // Called when the game starts or when spawned
+	virtual void StartPlay() override;
+	
     virtual void BeginPlay() override;
 
 public:
@@ -28,6 +30,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	FOnQuartzMetronomeEventBP MetronomeEvent;
+
+	UFUNCTION(BlueprintGetter)
+	float GetPlayfieldRadius() const;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -56,6 +61,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	EAudioFaderCurve FaderCurve = EAudioFaderCurve::Linear;
+
+	UPROPERTY(EditAnywhere)
+	float PlayfieldRadius = 100;
 
 	UFUNCTION()
 	void OnAudioComponentQuantized(EQuartzCommandDelegateSubType CommandType, FName Name);

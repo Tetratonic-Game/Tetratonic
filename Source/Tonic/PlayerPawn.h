@@ -55,9 +55,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	FVector OriginPosition = FVector(0, 0, 0);
-
-	UPROPERTY(EditAnywhere)
-	float InputDisplacement = 100;
+	
+	float InputDisplacement;
 	
 	int32 Score;
 };

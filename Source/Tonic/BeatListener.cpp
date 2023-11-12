@@ -15,7 +15,6 @@ UBeatListener::UBeatListener()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 // Called when the game starts
 void UBeatListener::BeginPlay()
 {
@@ -27,12 +26,17 @@ void UBeatListener::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("BeatListener component was attached to %s, but this actor does not implement IBeatListenerInterface."), *Owner->GetActorNameOrLabel());
 		return;
 	}
-	
-	UWorld* World = GetWorld();
+
+	const UWorld* World = GetWorld();
 	ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(World->GetAuthGameMode());
 	if (!TrackGameMode)
 	{
-		UE_LOG(LogTemp, Error, TEXT("BeatListener component could not attach to Quartz subsystem as the current game mode is not a TrackGameMode."));
+		UE_LOG(LogTemp, Error, TEXT("BeatListener for %s could not attach to Quartz subsystem as the current game mode is not a TrackGameMode."), *Owner->GetActorNameOrLabel());
+		return;
+	}
+	if (!TrackGameMode->QuartzClock)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeatListener for %s could not be attached as target game mode does not have an active Quartz clock."), *Owner->GetActorNameOrLabel());
 		return;
 	}
 	
@@ -45,6 +49,4 @@ void UBeatListener::BeginPlay()
 void UBeatListener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }

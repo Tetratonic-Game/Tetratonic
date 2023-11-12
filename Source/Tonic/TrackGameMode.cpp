@@ -7,10 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Quartz/AudioMixerClockHandle.h"
 
-void ATrackGameMode::BeginPlay()
+void ATrackGameMode::StartPlay()
 {
-	Super::BeginPlay();
-
 	UE_LOG(LogTemp, Display, TEXT("Game mode initializing Quartz clock"));
 	const UWorld* World = GetWorld();
 	UQuartzSubsystem* QuartzSubsystem = UQuartzSubsystem::Get(World);
@@ -22,17 +20,20 @@ void ATrackGameMode::BeginPlay()
 	FQuartzQuantizationBoundary QuantizationBoundary = FQuartzQuantizationBoundary();
 	QuantizationBoundary.Quantization = EQuartzCommandQuantization::Beat;
 	QuantizationBoundary.CountingReferencePoint = EQuarztQuantizationReference::BarRelative;
-
-	// MetronomeEvent = FOnQuartzMetronomeEventBP();
-	// MetronomeEvent.BindUFunction(this, "OnBeat");
 	
 	QuartzClock = QuartzSubsystem->CreateNewClock(this, FName("ConductorClock"), ClockSettings);
 	QuartzClock->SetBeatsPerMinute(World, QuantizationBoundary, FOnQuartzCommandEventBP(), QuartzClock, BeatsPerMinute);
-	// QuartzClock->SubscribeToQuantizationEvent(World, EQuartzCommandQuantization::Beat, MetronomeEvent, QuartzClock);
 
+	Super::StartPlay();
+}
+
+void ATrackGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+	
 	if (StartDelay > 0)
 	{
-		World->GetTimerManager().SetTimer(TimerHandle_StartDelay, this, &ATrackGameMode::PlayAudioTrack, StartDelay);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_StartDelay, this, &ATrackGameMode::PlayAudioTrack, StartDelay);
 	}
 	else
 	{
@@ -78,6 +79,7 @@ void ATrackGameMode::OnAudioComponentQuantized(EQuartzCommandDelegateSubType Com
 	}
 }
 
-
-
-
+float ATrackGameMode::GetPlayfieldRadius() const
+{
+	return this->PlayfieldRadius;
+}

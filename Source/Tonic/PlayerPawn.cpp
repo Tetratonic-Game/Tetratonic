@@ -26,6 +26,16 @@ void APlayerPawn::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);	
 		}
 	}
+
+	const UWorld* World = GetWorld();
+	ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(World->GetAuthGameMode());
+	if (!TrackGameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeatListener for %s could not attach to Quartz subsystem as the current game mode is not a TrackGameMode."), *Owner->GetActorNameOrLabel());
+		return;
+	}
+
+	InputDisplacement = TrackGameMode->GetPlayfieldRadius();
 }
 
 // Called every frame
