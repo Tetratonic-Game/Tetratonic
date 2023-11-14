@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ExtendableEntity.h"
 #include "GameFramework/Actor.h"
 #include "EntitySpawner.generated.h"
 
@@ -12,19 +13,6 @@ enum class EEntityType : uint8
 	TestEntity UMETA(DisplayName="Test Entity"),
 	AdversaryEntity UMETA(DisplayName="Adversary"),
 	RewardEntity UMETA(DisplayName="Reward"),
-};
-
-UENUM(BlueprintType)
-enum class EEntityDirection : uint8
-{
-	Top UMETA(DisplayName="Top"),
-	Left UMETA(DisplayName="Left"),
-	Right UMETA(DisplayName="Right"),
-	Bottom UMETA(DisplayName="Bottom"),
-	TopLeft UMETA(DisplayName="Top Left"),
-	TopRight UMETA(DisplayName="Top Right"),
-	BottomLeft UMETA(DisplayName="Bottom Left"),
-	BottomRight UMETA(DisplayName="Bottom Right")
 };
 
 UENUM(BlueprintType)
@@ -77,6 +65,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
 	void SpawnEntities(int32 CurrentBeat);
 
 private:
@@ -85,5 +74,22 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float EntityVelocity = 200;
+
+	UPROPERTY(EditAnywhere)
+	int32 SpawnBeatOffset = 4;
+
+	UPROPERTY(EditAnywhere)
+	int32 DespawnBeatOffset;
+
+	UPROPERTY(EditAnywhere)
+	AActor* TestEntityActor;
+
+	UPROPERTY(EditAnywhere)
+	AActor* AdversaryActor;
+
+	UPROPERTY(EditAnywhere)
+	AActor* RewardActor;
+
+	void SpawnEntity(FEntitySpawnParameters SpawnParameters);
 	
 };
