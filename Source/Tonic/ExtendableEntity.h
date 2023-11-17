@@ -4,18 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Quartz/AudioMixerClockHandle.h"
 #include "ExtendableEntity.generated.h"
 
 UENUM(BlueprintType)
 enum class EEntityDirection : uint8
 {
-	Top UMETA(DisplayName="Top"),
-	Left UMETA(DisplayName="Left"),
 	Right UMETA(DisplayName="Right"),
-	Bottom UMETA(DisplayName="Bottom"),
-	TopLeft UMETA(DisplayName="Top Left"),
 	TopRight UMETA(DisplayName="Top Right"),
+	Top UMETA(DisplayName="Top"),
+	TopLeft UMETA(DisplayName="Top Left"),
+	Left UMETA(DisplayName="Left"),
 	BottomLeft UMETA(DisplayName="Bottom Left"),
+	Bottom UMETA(DisplayName="Bottom"),
 	BottomRight UMETA(DisplayName="Bottom Right")
 };
 
@@ -51,15 +52,28 @@ public:
 	UMaterialInstance* EndCapMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int32 Length = 200;
+	EEntityDirection Direction = EEntityDirection::Right;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	EEntityDirection Direction = EEntityDirection::Right;
+	int32 Speed = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 TargetBeat = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	float NumBeats = 4;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool UseDiscreteMotion = false;
 	
 	UPROPERTY(BlueprintReadWrite)
 	UStaticMeshComponent* StartCapComponent;
 
 	UPROPERTY(BlueprintReadWrite)
 	UStaticMeshComponent* EndCapComponent;
+
+private:
+	UPROPERTY()
+	UQuartzClockHandle* ClockHandle;
 
 };
