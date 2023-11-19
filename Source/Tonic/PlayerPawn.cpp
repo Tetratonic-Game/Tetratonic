@@ -3,6 +3,7 @@
 #include "PlayerPawn.h"
 #include "CoreMinimal.h"
 #include "EnhancedInputSubsystems.h"
+#include "TrackGameMode.h"
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -25,6 +26,16 @@ void APlayerPawn::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);	
 		}
 	}
+
+	const UWorld* World = GetWorld();
+	ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(World->GetAuthGameMode());
+	if (!TrackGameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("BeatListener for %s could not attach to Quartz subsystem as the current game mode is not a TrackGameMode."), *Owner->GetActorNameOrLabel());
+		return;
+	}
+
+	InputDisplacement = TrackGameMode->GetPlayfieldRadius();
 }
 
 // Called every frame
@@ -69,7 +80,3 @@ void APlayerPawn::SetScore(const int32 NewScore)
 	Score = NewScore;
 	UE_LOG(LogTemp, Display, TEXT("New player score: %d"), Score);
 }
-
-
-
-
