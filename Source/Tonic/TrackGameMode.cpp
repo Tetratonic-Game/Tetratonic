@@ -93,12 +93,10 @@ void ATrackGameMode::SetPaused(bool bPaused)
 	{
 		if (bPaused)
 		{
-			UE_LOG(LogTemp, Display, TEXT("PAUSING!"));
 			QuartzClock->PauseClock(World, QuartzClock);
 		}
 		else
 		{
-			UE_LOG(LogTemp, Display, TEXT("UNPAUSING!"));
 			QuartzClock->StartClock(World, QuartzClock);
 		}
 	}

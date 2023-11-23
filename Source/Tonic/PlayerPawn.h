@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetScore(const int32 NewScore);
 
+	UPROPERTY(BlueprintReadWrite)
+	float InputDisplacement;
+
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	
@@ -55,8 +58,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	FVector OriginPosition = FVector(0, 0, 0);
-	
-	float InputDisplacement;
 	
 	int32 Score;
 };

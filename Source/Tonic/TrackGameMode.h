@@ -34,7 +34,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	UAudioComponent* AudioComponent;
 
-	UFUNCTION(BlueprintGetter)
+	UFUNCTION(BlueprintCallable)
 	float GetPlayfieldRadius() const;
 
 	UFUNCTION(BlueprintCallable)
