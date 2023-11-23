@@ -15,16 +15,6 @@ enum class EEntityType : uint8
 	RewardEntity UMETA(DisplayName="Reward"),
 };
 
-UENUM(BlueprintType)
-enum class EEntityTarget : uint8
-{
-	Top UMETA(DisplayName="Top"),
-	Left UMETA(DisplayName="Left"),
-	Center UMETA(DisplayName="Center"),
-	Right UMETA(DisplayName="Right"),
-	Bottom UMETA(DisplayName="Bottom")
-};
-
 USTRUCT(BlueprintType)
 struct FEntitySpawnParameters
 {

@@ -25,6 +25,9 @@ void AExtendableEntity::BeginPlay()
 	if (const ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		ClockHandle = TrackGameMode->QuartzClock;
+
+		const FRotator TargetPositionRotator = FRotator(90 * static_cast<int>(TargetPosition), 0, 0);
+		TargetPositionOffset = static_cast<bool>(TargetPosition) * TargetPositionRotator.Vector() * TrackGameMode->GetPlayfieldRadius();
 	}
 }
 
@@ -45,8 +48,8 @@ void AExtendableEntity::OnConstruction(const FTransform& Transform)
 
 	EndCapComponent->SetRelativeLocation(FVector(-1, 0, 0) * Speed * NumBeats);
 
-	const FRotator Rotator = FRotator(45 * static_cast<int>(Direction), 0, 0);
-	StartCapComponent->SetRelativeRotation(Rotator);
+	const FRotator MovementRotator = FRotator(45 * static_cast<int>(Direction), 0, 0);
+	StartCapComponent->SetRelativeRotation(MovementRotator);
 }
 
 // Called every frame
@@ -62,14 +65,23 @@ void AExtendableEntity::Tick(float DeltaTime)
 		float BeatOffset = (Timestamp.Bars - 1) * 4 + (Timestamp.Beat - TargetBeat);
 		if (!UseDiscreteMotion)
 		{
-			BeatOffset += BeatFraction;
-			if (BeatFraction < Timestamp.BeatFraction)
+			const float TimestampError = FMath::Abs(Timestamp.BeatFraction - BeatFraction);
+			float SelectedFraction = BeatFraction;
+			
+			if (TimestampError > 0.9)		// Adjust for wrap-around of beat fraction on downbeat
 			{
 				BeatOffset += 1;
 			}
+			else if (TimestampError > 0.1)	// Adjust for potential desync when unpausing
+			{
+				SelectedFraction = Timestamp.BeatFraction;
+			}
+			
+			const float FractionComponent = 1 - FMath::Sqrt(1 - FMath::Pow(SelectedFraction, 2));
+			BeatOffset += FractionComponent;
 		}
 		
-		SetActorLocation(GetActorForwardVector() * Speed * BeatOffset);
+		SetActorLocation(GetActorForwardVector() * Speed * BeatOffset + TargetPositionOffset);
 	}
 }
 

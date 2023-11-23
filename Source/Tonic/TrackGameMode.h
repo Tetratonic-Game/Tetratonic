@@ -31,8 +31,14 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FOnQuartzMetronomeEventBP MetronomeEvent;
 
+	UPROPERTY(BlueprintReadWrite)
+	UAudioComponent* AudioComponent;
+
 	UFUNCTION(BlueprintGetter)
 	float GetPlayfieldRadius() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetPaused(bool bPaused);
 
 private:
 	UPROPERTY(EditAnywhere)

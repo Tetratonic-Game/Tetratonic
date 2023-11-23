@@ -20,6 +20,17 @@ enum class EEntityDirection : uint8
 	BottomRight UMETA(DisplayName="Bottom Right")
 };
 
+UENUM(BlueprintType)
+enum class EEntityTarget : uint8
+{
+	Center UMETA(DisplayName="Center"),
+	Top UMETA(DisplayName="Top"),
+	Left UMETA(DisplayName="Left"),
+	Bottom UMETA(DisplayName="Bottom"),
+	Right UMETA(DisplayName="Right")
+};
+
+
 UCLASS()
 class TONIC_API AExtendableEntity : public AActor
 {
@@ -55,13 +66,16 @@ public:
 	EEntityDirection Direction = EEntityDirection::Right;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int32 Speed = 100;
+	EEntityTarget TargetPosition = EEntityTarget::Center;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int32 TargetBeat = 0;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	float NumBeats = 4;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 Speed = 100;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool UseDiscreteMotion = false;
@@ -75,5 +89,7 @@ public:
 private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;
+
+	FVector TargetPositionOffset;
 
 };

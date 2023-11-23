@@ -58,7 +58,7 @@ void ATrackGameMode::PlayAudioTrack()
 	
 	const UWorld* World = GetWorld();
 
-	UAudioComponent* AudioComponent = UGameplayStatics::CreateSound2D(World, AudioTrack);
+	AudioComponent = UGameplayStatics::CreateSound2D(World, AudioTrack);
 
 	FQuartzQuantizationBoundary TrackBoundary = FQuartzQuantizationBoundary();
 	TrackBoundary.Quantization = EQuartzCommandQuantization::Bar;
@@ -83,3 +83,28 @@ float ATrackGameMode::GetPlayfieldRadius() const
 {
 	return this->PlayfieldRadius;
 }
+
+void ATrackGameMode::SetPaused(bool bPaused)
+{
+	const UWorld* World = GetWorld();
+	UGameplayStatics::SetGamePaused(World, bPaused);
+	
+	if (QuartzClock)
+	{
+		if (bPaused)
+		{
+			UE_LOG(LogTemp, Display, TEXT("PAUSING!"));
+			QuartzClock->PauseClock(World, QuartzClock);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Display, TEXT("UNPAUSING!"));
+			QuartzClock->StartClock(World, QuartzClock);
+		}
+	}
+	if (AudioComponent)
+	{
+		AudioComponent->SetPaused(bPaused);
+	}
+}
+
