@@ -3,7 +3,9 @@
 
 #include "ExtendableEntity.h"
 
+#include "PlayerCollider.h"
 #include "TrackGameMode.h"
+#include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 
 // Sets default values
@@ -14,7 +16,11 @@ AExtendableEntity::AExtendableEntity()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	
 	StartCapComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StartCap"));
+	SetRootComponent(StartCapComponent);
+	
 	EndCapComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EndCap"));
+
+	DynamicComponentRefs = TArray<USceneComponent*>();
 }
 
 // Called when the game starts or when spawned
@@ -33,11 +39,19 @@ void AExtendableEntity::BeginPlay()
 
 void AExtendableEntity::OnConstruction(const FTransform& Transform)
 {
+	for (const auto& DynamicComponent : DynamicComponentRefs)
+	{
+		if (DynamicComponent)
+		{
+			DynamicComponent->DestroyComponent();
+		}
+	}
+	DynamicComponentRefs.Empty();
+	
 	if (!StartCapComponent || !EndCapComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("ExtendableEntity %s does not have start or end cap components, skipping construction."), *GetActorNameOrLabel());
 	}
-	StartCapComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	EndCapComponent->AttachToComponent(StartCapComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 	StartCapComponent->SetStaticMesh(StartCapMesh);
@@ -48,8 +62,30 @@ void AExtendableEntity::OnConstruction(const FTransform& Transform)
 
 	EndCapComponent->SetRelativeLocation(FVector(-1, 0, 0) * Speed * NumBeats);
 
+	for (float SpannerCollisionOffset = 0.5; SpannerCollisionOffset < NumBeats; SpannerCollisionOffset += 0.5)
+	{
+		AddSpannerCollider(SpannerCollisionOffset);
+	}
+
 	const FRotator MovementRotator = FRotator(45 * static_cast<int>(Direction), 0, 0);
 	StartCapComponent->SetRelativeRotation(MovementRotator);
+}
+
+void AExtendableEntity::AddSpannerCollider(float BeatOffset)
+{
+	USphereComponent* SphereComponent = NewObject<USphereComponent>(this);
+	SphereComponent->AttachToComponent(StartCapComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	SphereComponent->SetRelativeLocation(FVector(-1, 0, 0) * Speed * BeatOffset);
+	SphereComponent->SetSphereRadius(SpannerColliderRadius);
+	SphereComponent->RegisterComponent();
+
+	UPlayerCollider* PlayerCollider = NewObject<UPlayerCollider>(this);
+	PlayerCollider->AttachToComponent(SphereComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	PlayerCollider->bResetsCombo = true;
+	PlayerCollider->HealthModifier = SpannerHealthModifier;
+	PlayerCollider->RegisterComponent();
+	
+	DynamicComponentRefs.Add(SphereComponent);
 }
 
 // Called every frame

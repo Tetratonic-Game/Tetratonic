@@ -79,6 +79,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	bool UseDiscreteMotion = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float SpannerColliderRadius = 10;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 SpannerHealthModifier = -10;
 	
 	UPROPERTY(BlueprintReadWrite)
 	UStaticMeshComponent* StartCapComponent;
@@ -90,6 +96,11 @@ private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;
 
+	UPROPERTY()
+	TArray<USceneComponent*> DynamicComponentRefs;
+
 	FVector TargetPositionOffset;
+
+	void AddSpannerCollider(float BeatOffset);
 
 };

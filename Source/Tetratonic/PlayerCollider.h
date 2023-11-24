@@ -23,8 +23,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-private:
+	
 	UPROPERTY(EditDefaultsOnly)
 	int32 ScoreModifier = 0;
 
@@ -37,6 +36,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	bool bIncreasesCombo;
 
+private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
