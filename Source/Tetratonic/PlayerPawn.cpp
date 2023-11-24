@@ -19,6 +19,7 @@ void APlayerPawn::BeginPlay()
 	Super::BeginPlay();
 
 	Score = StartingScore;
+	Health = StartingHealth;
 	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -28,7 +29,7 @@ void APlayerPawn::BeginPlay()
 	}
 
 	const UWorld* World = GetWorld();
-	ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(World->GetAuthGameMode());
+	const ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(World->GetAuthGameMode());
 	if (!TrackGameMode)
 	{
 		UE_LOG(LogTemp, Error, TEXT("BeatListener for %s could not attach to Quartz subsystem as the current game mode is not a TrackGameMode."), *Owner->GetActorNameOrLabel());
@@ -38,14 +39,11 @@ void APlayerPawn::BeginPlay()
 	InputDisplacement = TrackGameMode->GetPlayfieldRadius();
 }
 
-// Called every frame
 void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-// Called to bind functionality to input
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -75,8 +73,36 @@ int32 APlayerPawn::GetScore() const
 	return Score;
 }
 
-void APlayerPawn::SetScore(const int32 NewScore)
+void APlayerPawn::AddToScore(const int32 ScoreModifier)
 {
-	Score = NewScore;
-	UE_LOG(LogTemp, Display, TEXT("New player score: %d"), Score);
+	Score += ScoreModifier * (Combo + 1);
+}
+
+int32 APlayerPawn::GetCombo() const
+{
+	return Combo;
+}
+
+void APlayerPawn::IncreaseCombo()
+{
+	if (Combo < MaxCombo)
+	{
+		++Combo;
+	}
+}
+
+void APlayerPawn::ResetCombo()
+{
+	Combo = 0;
+	UE_LOG(LogTemp, Display, TEXT("COMBO WAS RESET"));
+}
+
+int32 APlayerPawn::GetHealth() const
+{
+	return Health;
+}
+
+void APlayerPawn::AddToHealth(const int32 HealthModifier)
+{
+	Health += HealthModifier;
 }

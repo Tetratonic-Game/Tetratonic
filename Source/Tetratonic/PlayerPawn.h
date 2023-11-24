@@ -39,7 +39,22 @@ public:
 	int32 GetScore() const;
 
 	UFUNCTION(BlueprintCallable)
-	void SetScore(const int32 NewScore);
+	void AddToScore(const int32 ScoreModifier);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetCombo() const;
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseCombo();
+
+	UFUNCTION(BlueprintCallable)
+	void ResetCombo();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+	void AddToHealth(const int32 HealthModifier);
 
 	UPROPERTY(BlueprintReadWrite)
 	float InputDisplacement;
@@ -54,10 +69,23 @@ private:
 	UInputAction* UpAction;
 
 	UPROPERTY(EditAnywhere)
-	int32 StartingScore = 100;
-
-	UPROPERTY(EditAnywhere)
 	FVector OriginPosition = FVector(0, 0, 0);
 	
+	UPROPERTY(EditDefaultsOnly)
+	int32 StartingScore = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 StartingCombo = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 MaxCombo = 8;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 StartingHealth = 100;
+	
 	int32 Score;
+
+	int32 Combo;
+
+	int32 Health;
 };

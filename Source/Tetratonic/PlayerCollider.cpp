@@ -46,6 +46,15 @@ void UPlayerCollider::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor
 {
 	if (APlayerPawn* Player = Cast<APlayerPawn>(OtherActor))
 	{
-		Player->SetScore(Player->GetScore() + ScoreModifier);
+		Player->AddToScore(ScoreModifier);
+		if (bResetsCombo)
+		{
+			Player->ResetCombo();
+		}
+		if (bIncreasesCombo)
+		{
+			Player->IncreaseCombo();
+		}
+		Player->AddToHealth(HealthModifier);
 	}
 }

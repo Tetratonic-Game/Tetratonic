@@ -7,7 +7,7 @@
 #include "PlayerCollider.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( DefaultToInstanced, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TETRATONIC_API UPlayerCollider : public USceneComponent
 {
 	GENERATED_BODY()
@@ -29,7 +29,13 @@ private:
 	int32 ScoreModifier = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 ComboModifier = 0;
+	int32 HealthModifier = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bResetsCombo;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bIncreasesCombo;
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
