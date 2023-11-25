@@ -19,8 +19,6 @@ AExtendableEntity::AExtendableEntity()
 	SetRootComponent(StartCapComponent);
 	
 	EndCapComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EndCap"));
-
-	// DynamicComponentRefs = TArray<USceneComponent*>();
 }
 
 // Called when the game starts or when spawned
