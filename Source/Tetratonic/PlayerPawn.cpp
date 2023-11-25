@@ -94,6 +94,7 @@ void APlayerPawn::IncreaseCombo()
 void APlayerPawn::ResetCombo()
 {
 	Combo = 0;
+	UE_LOG(LogTemp, Display, TEXT("COMBO RESET"));
 }
 
 int32 APlayerPawn::GetHealth() const

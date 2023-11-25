@@ -35,13 +35,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int32 GetScore() const;
 
 	UFUNCTION(BlueprintCallable)
 	void AddToScore(const int32 ScoreModifier);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int32 GetCombo() const;
 
 	UFUNCTION(BlueprintCallable)
@@ -50,7 +50,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int32 GetHealth() const;
 
 	UFUNCTION(BlueprintCallable)

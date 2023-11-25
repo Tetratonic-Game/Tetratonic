@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Quartz/AudioMixerClockHandle.h"
 #include "ExtendableEntity.generated.h"
@@ -80,27 +81,22 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	bool UseDiscreteMotion = false;
 
-	UPROPERTY(EditDefaultsOnly)
-	float SpannerColliderRadius = 10;
-
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int32 SpannerHealthModifier = -10;
 	
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	UStaticMeshComponent* StartCapComponent;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	UStaticMeshComponent* EndCapComponent;
+
+	UPROPERTY(BlueprintReadOnly)
+	UBoxComponent* SpannerCollisionComponent;
 
 private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;
 
-	UPROPERTY()
-	TArray<USceneComponent*> DynamicComponentRefs;
-
 	FVector TargetPositionOffset;
-
-	void AddSpannerCollider(float BeatOffset);
 
 };
