@@ -6,13 +6,21 @@
 #include "Components/SceneComponent.h"
 #include "PlayerCollider.generated.h"
 
+UENUM(BlueprintType)
+enum class EAccuracyType : uint8
+{
+	Okay UMETA(DisplayName="okay"),
+	Good UMETA(DisplayName="good"),
+	Great UMETA(DisplayName="great"),
+	Perfect UMETA(DisplayName="perfect"),
+};
 
 UCLASS( DefaultToInstanced, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TETRATONIC_API UPlayerCollider : public USceneComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UPlayerCollider();
 
@@ -20,20 +28,17 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	UPROPERTY(EditDefaultsOnly)
-	int32 ScoreModifier = 0;
 
 	UPROPERTY(EditDefaultsOnly)
-	int32 HealthModifier = 0;
+	TMap<EAccuracyType, int32> AccuracyScoreModifiers;
 
 	UPROPERTY(EditDefaultsOnly)
-	bool bResetsCombo;
+	TMap<EAccuracyType, int32> AccuracyHealthModifiers;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool bIncreasesCombo;
 
 private:
