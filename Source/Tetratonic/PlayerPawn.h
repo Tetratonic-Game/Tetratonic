@@ -59,6 +59,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float InputDisplacement;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 StartingHealth = 100;
+
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	
@@ -79,9 +82,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 MaxCombo = 8;
-
-	UPROPERTY(EditDefaultsOnly)
-	int32 StartingHealth = 100;
 	
 	int32 Score;
 
