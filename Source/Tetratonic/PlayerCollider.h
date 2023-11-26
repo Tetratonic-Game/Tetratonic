@@ -15,6 +15,8 @@ enum class EAccuracyType : uint8
 	Perfect UMETA(DisplayName="perfect"),
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerColliderTimingEventSignature);
+
 UCLASS( DefaultToInstanced, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TETRATONIC_API UPlayerCollider : public USceneComponent
 {
@@ -41,7 +43,18 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool bIncreasesCombo;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bIsBeginOverlap = true;
+
+	UPROPERTY(BlueprintAssignable, Category="PlayerCollider")
+	FPlayerColliderTimingEventSignature OnPlayerCollision;
+
 private:
 	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	bool bCollided = false;
 };

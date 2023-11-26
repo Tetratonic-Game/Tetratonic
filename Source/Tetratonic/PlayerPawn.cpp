@@ -108,10 +108,10 @@ void APlayerPawn::DisplacePawn(const FVector NormalizedDirection)
 
 void APlayerPawn::ReturnToOrigin()
 {
+	SetCurrentPosition(EEntityTarget::Center);
+	
 	UStaticMeshComponent* PlayerMesh = GetPlayerMesh();
 	PlayerMesh->SetRelativeLocation(OriginPosition);
-
-	SetCurrentPosition(EEntityTarget::Center);
 }
 
 UStaticMeshComponent* APlayerPawn::GetPlayerMesh() const

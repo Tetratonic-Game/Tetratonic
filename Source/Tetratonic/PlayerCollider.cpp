@@ -14,7 +14,6 @@ UPlayerCollider::UPlayerCollider()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-
 void UPlayerCollider::BeginPlay()
 {
 	Super::BeginPlay();
@@ -23,7 +22,14 @@ void UPlayerCollider::BeginPlay()
 	{
 		CollisionMesh->SetGenerateOverlapEvents(true);
 		CollisionMesh->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-		CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &UPlayerCollider::OnOverlapBegin);
+		if (bIsBeginOverlap)
+		{
+			CollisionMesh->OnComponentBeginOverlap.AddDynamic(this, &UPlayerCollider::OnBeginOverlap);
+		}
+		else
+		{
+			CollisionMesh->OnComponentEndOverlap.AddDynamic(this, &UPlayerCollider::OnEndOverlap);
+		}
 	}
 	else
 	{
@@ -35,17 +41,31 @@ void UPlayerCollider::BeginPlay()
 	}
 }
 
-
 void UPlayerCollider::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-
-void UPlayerCollider::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UPlayerCollider::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (bCollided) return;
+	
 	if (APlayerPawn* Player = Cast<APlayerPawn>(OtherActor))
 	{
+		bCollided = true;
 		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo);
+		OnPlayerCollision.Broadcast();
+	}
+}
+
+void UPlayerCollider::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (bCollided) return;
+	
+	if (APlayerPawn* Player = Cast<APlayerPawn>(OtherActor))
+	{
+		bCollided = true;
+		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo);
+		OnPlayerCollision.Broadcast();
 	}
 }
