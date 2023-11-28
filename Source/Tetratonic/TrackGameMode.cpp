@@ -59,6 +59,8 @@ void ATrackGameMode::PlayAudioTrack()
 	const UWorld* World = GetWorld();
 
 	AudioComponent = UGameplayStatics::CreateSound2D(World, AudioTrack);
+	AudioComponent->bOverridePriority = true;
+	AudioComponent->Priority = 10;
 
 	FQuartzQuantizationBoundary TrackBoundary = FQuartzQuantizationBoundary();
 	TrackBoundary.Quantization = EQuartzCommandQuantization::Bar;
