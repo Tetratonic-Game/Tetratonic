@@ -76,7 +76,7 @@ public:
 	float NumBeats = 4;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int32 Speed = 100;
+	float Speed = 100;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool UseDiscreteMotion = false;

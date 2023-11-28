@@ -53,7 +53,7 @@ void UPlayerCollider::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor
 	if (APlayerPawn* Player = Cast<APlayerPawn>(OtherActor))
 	{
 		bCollided = true;
-		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo);
+		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo, OverlappedComp->GetComponentLocation());
 		OnPlayerCollision.Broadcast();
 	}
 }
@@ -65,7 +65,7 @@ void UPlayerCollider::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 	if (APlayerPawn* Player = Cast<APlayerPawn>(OtherActor))
 	{
 		bCollided = true;
-		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo);
+		Player->EvaluateTimingEvent(AccuracyScoreModifiers, AccuracyHealthModifiers, bIncreasesCombo, OverlappedComp->GetComponentLocation());
 		OnPlayerCollision.Broadcast();
 	}
 }

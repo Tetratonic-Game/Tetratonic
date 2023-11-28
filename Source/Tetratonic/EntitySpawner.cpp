@@ -4,8 +4,6 @@
 #include "EntitySpawner.h"
 
 #include "TrackGameMode.h"
-#include "EntitySystem/MovieSceneEntitySystemRunner.h"
-#include "GameFramework/GameMode.h"
 
 // Sets default values
 AEntitySpawner::AEntitySpawner()
@@ -46,15 +44,15 @@ void AEntitySpawner::SpawnEntities(int32 CurrentBeat)
 	int32 NumSpawns = EntitySpawns.Num();
 	while (NumSpawns > 0 && EntitySpawns[NumSpawns - 1].TargetBeat <= CurrentBeat + SpawnBeatOffset)
 	{
-		const FEntitySpawnParameters& SpawnParameters = EntitySpawns.Pop();
+		const auto& [EntityType, EntityDirection, TargetPosition, TargetBeat, NumBeats] = EntitySpawns.Pop();
 		NumSpawns--;
 
 		SpawnEntity(
-			(SpawnParameters.EntityType == EEntityType::PickupEntity) ? PickupClass : AdversaryClass,
-			SpawnParameters.EntityDirection,
-			SpawnParameters.TargetPosition,
-			SpawnParameters.TargetBeat,
-			SpawnParameters.NumBeats,
+			(EntityType == EEntityType::PickupEntity) ? PickupClass : AdversaryClass,
+			EntityDirection,
+			TargetPosition,
+			TargetBeat,
+			NumBeats,
 			EntitySpeed
 			);
 	}

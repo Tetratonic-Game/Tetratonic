@@ -47,6 +47,11 @@ void AExtendableEntity::OnConstruction(const FTransform& Transform)
 		UE_LOG(LogTemp, Error, TEXT("ExtendableEntity %s does not have start or end cap components, skipping construction."), *GetActorNameOrLabel());
 	}
 	EndCapComponent->AttachToComponent(StartCapComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	if (static_cast<int>(Direction) % 2 == 1)
+	{
+		Speed = Speed * FMath::Sqrt(2.0f);
+	}
 	
 	StartCapComponent->SetStaticMesh(StartCapMesh);
 	EndCapComponent->SetStaticMesh(EndCapMesh);

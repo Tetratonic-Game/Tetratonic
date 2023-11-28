@@ -61,7 +61,7 @@ public:
 	void SpawnEntities(int32 CurrentBeat);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SpawnEntity(TSubclassOf<AExtendableEntity> EntityClass, EEntityDirection EntityDirection, EEntityTarget TargetPosition, int32 TargetBeat, float NumBeats, int32 Speed);
+	void SpawnEntity(TSubclassOf<AExtendableEntity> EntityClass, EEntityDirection EntityDirection, EEntityTarget TargetPosition, int32 TargetBeat, float NumBeats, float Speed);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<AExtendableEntity> AdversaryClass;
@@ -76,6 +76,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 SpawnBeatOffset = 4;
 
-	int32 EntitySpeed = 100;
+	float EntitySpeed = 100;
 	
 };
