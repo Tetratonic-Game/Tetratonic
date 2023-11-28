@@ -68,7 +68,7 @@ public:
 	void AddToHealth(const int32 HealthModifier);
 
 	UFUNCTION(BlueprintCallable)
-	void SetCurrentPosition(const EEntityTarget NewPosition);
+	bool SetCurrentPosition(const EEntityTarget NewPosition);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	EEntityTarget GetCurrentPosition() const;

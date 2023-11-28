@@ -10,7 +10,6 @@ APlayerPawn::APlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -159,9 +158,14 @@ void APlayerPawn::AddToHealth(const int32 HealthModifier)
 	Health += HealthModifier;
 }
 
-void APlayerPawn::SetCurrentPosition(const EEntityTarget NewPosition)
+bool APlayerPawn::SetCurrentPosition(const EEntityTarget NewPosition)
 {
-	CurrentPosition = NewPosition;
+	if (CurrentPosition != NewPosition)
+	{
+		CurrentPosition = NewPosition;
+		return true;
+	}
+	return false;
 }
 
 EEntityTarget APlayerPawn::GetCurrentPosition() const
