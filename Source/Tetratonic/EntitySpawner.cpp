@@ -3,11 +3,16 @@
 
 #include "EntitySpawner.h"
 
+#include "TrackGameMode.h"
+#include "EntitySystem/MovieSceneEntitySystemRunner.h"
+#include "GameFramework/GameMode.h"
+
 // Sets default values
 AEntitySpawner::AEntitySpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame. You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bStartWithTickEnabled = false;
 }
 
 // Called when the game starts or when spawned
@@ -17,8 +22,17 @@ void AEntitySpawner::BeginPlay()
 
 	EntitySpawns.Sort([](const FEntitySpawnParameters& Entity1, const FEntitySpawnParameters& Entity2)
 	{
-		return Entity1.Beat > Entity2.Beat;
+		return Entity1.TargetBeat > Entity2.TargetBeat;
 	});
+
+	if (const ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		EntitySpeed = TrackGameMode->EntitySpeed;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("EntitySpawner initialized without an active TrackGameMode, using default entity speed."));
+	}
 }
 
 // Called every frame
@@ -30,23 +44,18 @@ void AEntitySpawner::Tick(float DeltaTime)
 void AEntitySpawner::SpawnEntities(int32 CurrentBeat)
 {
 	int32 NumSpawns = EntitySpawns.Num();
-	while (NumSpawns > 0 && EntitySpawns[NumSpawns - 1].Beat <= CurrentBeat + SpawnBeatOffset)
+	while (NumSpawns > 0 && EntitySpawns[NumSpawns - 1].TargetBeat <= CurrentBeat + SpawnBeatOffset)
 	{
 		const FEntitySpawnParameters& SpawnParameters = EntitySpawns.Pop();
 		NumSpawns--;
 
-		SpawnEntity(SpawnParameters);
+		SpawnEntity(
+			(SpawnParameters.EntityType == EEntityType::PickupEntity) ? PickupClass : AdversaryClass,
+			SpawnParameters.EntityDirection,
+			SpawnParameters.TargetPosition,
+			SpawnParameters.TargetBeat,
+			SpawnParameters.NumBeats,
+			EntitySpeed
+			);
 	}
 }
-
-void AEntitySpawner::SpawnEntity(FEntitySpawnParameters SpawnParameters)
-{
-	UE_LOG(
-		LogTemp,
-		Display,
-		TEXT("Spawning entity of type %d toward direction %d with length %d."),
-		SpawnParameters.EntityType,
-		SpawnParameters.EntityDirection,
-		SpawnParameters.Length);
-}
-

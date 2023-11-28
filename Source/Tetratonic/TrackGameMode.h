@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPaused(bool bPaused);
 
+	UPROPERTY(EditAnywhere)
+	int32 EntitySpeed = 100;
+
 private:
 	UPROPERTY(EditAnywhere)
 	USoundBase* AudioTrack;

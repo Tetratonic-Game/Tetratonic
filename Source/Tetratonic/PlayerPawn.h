@@ -30,7 +30,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ReturnToOrigin();
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

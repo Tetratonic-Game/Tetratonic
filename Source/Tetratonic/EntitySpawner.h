@@ -10,9 +10,8 @@
 UENUM(BlueprintType)
 enum class EEntityType : uint8
 {
-	TestEntity UMETA(DisplayName="Test Entity"),
+	PickupEntity UMETA(DisplayName="Pickup"),
 	AdversaryEntity UMETA(DisplayName="Adversary"),
-	RewardEntity UMETA(DisplayName="Reward"),
 };
 
 USTRUCT(BlueprintType)
@@ -21,24 +20,27 @@ struct FEntitySpawnParameters
 	GENERATED_USTRUCT_BODY();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Beat;
+	EEntityType EntityType = EEntityType::PickupEntity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEntityType EntityType;
+	EEntityDirection EntityDirection = EEntityDirection::Right;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEntityDirection EntityDirection;
+	EEntityTarget TargetPosition = EEntityTarget::Center;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Length = 0;
+	int32 TargetBeat = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float NumBeats = 0;
 
 	bool operator<(const FEntitySpawnParameters& Other) const
 	{
-		return Beat < Other.Beat;
+		return TargetBeat < Other.TargetBeat;
 	}
 };
 
-UCLASS()
+UCLASS(DefaultToInstanced)
 class TETRATONIC_API AEntitySpawner : public AActor
 {
 	GENERATED_BODY()
@@ -58,28 +60,22 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnEntities(int32 CurrentBeat);
 
-private:
-	UPROPERTY(EditAnywhere)
-	TArray<FEntitySpawnParameters> EntitySpawns;
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnEntity(TSubclassOf<AExtendableEntity> EntityClass, EEntityDirection EntityDirection, EEntityTarget TargetPosition, int32 TargetBeat, float NumBeats, int32 Speed);
 
-	UPROPERTY(EditAnywhere)
-	float EntityVelocity = 200;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AExtendableEntity> AdversaryClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AExtendableEntity> PickupClass;
+
+private:
+	UPROPERTY(EditInstanceOnly)
+	TArray<FEntitySpawnParameters> EntitySpawns;
 
 	UPROPERTY(EditAnywhere)
 	int32 SpawnBeatOffset = 4;
 
-	UPROPERTY(EditAnywhere)
-	int32 DespawnBeatOffset;
-
-	UPROPERTY(EditAnywhere)
-	AActor* TestEntityActor;
-
-	UPROPERTY(EditAnywhere)
-	AActor* AdversaryActor;
-
-	UPROPERTY(EditAnywhere)
-	AActor* RewardActor;
-
-	void SpawnEntity(FEntitySpawnParameters SpawnParameters);
+	int32 EntitySpeed = 100;
 	
 };
