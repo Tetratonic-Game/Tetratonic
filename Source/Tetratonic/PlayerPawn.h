@@ -82,6 +82,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	UQuartzClockHandle* ClockHandle;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnFailure();
+
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	

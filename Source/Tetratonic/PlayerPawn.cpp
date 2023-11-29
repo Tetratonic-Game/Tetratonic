@@ -162,6 +162,11 @@ int32 APlayerPawn::GetHealth() const
 void APlayerPawn::AddToHealth(const int32 HealthModifier)
 {
 	Health += HealthModifier;
+
+	if (Health <= 0)
+	{
+		OnFailure();
+	}
 }
 
 bool APlayerPawn::SetCurrentPosition(const EEntityTarget NewPosition)
