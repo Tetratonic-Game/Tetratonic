@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TrackGameMode.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Quartz/AudioMixerClockHandle.h"
@@ -96,6 +97,9 @@ public:
 private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;
+
+	UPROPERTY()
+	ATrackGameMode* TrackGameMode;
 
 	FVector TargetPositionOffset;
 
