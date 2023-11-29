@@ -35,13 +35,7 @@ public:
 	UAudioComponent* AudioComponent;
 
 	UFUNCTION(BlueprintCallable)
-	float GetPlayfieldRadius() const;
-
-	UFUNCTION(BlueprintCallable)
 	void SetPaused(bool bPaused);
-
-	UPROPERTY(EditAnywhere)
-	int32 EntitySpeed = 100;
 	
 	UFUNCTION(BlueprintCallable)
 	void GetCorrectedTimestamp(int32& Bars, int32& Beat, float& BeatFraction, float& Seconds) const;
@@ -70,9 +64,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	EAudioFaderCurve FaderCurve = EAudioFaderCurve::Linear;
-
-	UPROPERTY(EditAnywhere)
-	float PlayfieldRadius = 100;
 
 	UFUNCTION()
 	void OnAudioComponentQuantized(EQuartzCommandDelegateSubType CommandType, FName Name);

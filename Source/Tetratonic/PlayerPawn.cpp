@@ -35,7 +35,7 @@ void APlayerPawn::BeginPlay()
 		return;
 	}
 
-	InputDisplacement = TrackGameMode->GetPlayfieldRadius();
+	InputDisplacement = 100;
 	ClockHandle = TrackGameMode->QuartzClock;
 }
 
