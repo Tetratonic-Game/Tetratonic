@@ -26,7 +26,8 @@ void AExtendableEntity::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (const ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode()))
+	TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode());
+	if (TrackGameMode)
 	{
 		ClockHandle = TrackGameMode->QuartzClock;
 
@@ -47,6 +48,11 @@ void AExtendableEntity::OnConstruction(const FTransform& Transform)
 		UE_LOG(LogTemp, Error, TEXT("ExtendableEntity %s does not have start or end cap components, skipping construction."), *GetActorNameOrLabel());
 	}
 	EndCapComponent->AttachToComponent(StartCapComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	if (static_cast<int>(Direction) % 2 == 1)
+	{
+		Speed = Speed * FMath::Sqrt(2.0f);
+	}
 	
 	StartCapComponent->SetStaticMesh(StartCapMesh);
 	EndCapComponent->SetStaticMesh(EndCapMesh);
@@ -76,13 +82,19 @@ void AExtendableEntity::Tick(float DeltaTime)
 
 	if (ClockHandle)
 	{
-		const FQuartzTransportTimeStamp Timestamp = ClockHandle->GetCurrentTimestamp(GetWorld());
+		int32 TimestampBar;
+		int32 TimestampBeat;
+		float TimestampBeatFraction;
+		float TimestampSeconds;
+
+		TrackGameMode->GetCorrectedTimestamp(TimestampBar, TimestampBeat, TimestampBeatFraction, TimestampSeconds);
+
 		const float BeatFraction = ClockHandle->GetBeatProgressPercent();
 		
-		float BeatOffset = (Timestamp.Bars - 1) * 4 + (Timestamp.Beat - TargetBeat);
+		float BeatOffset = (TimestampBar - 1) * 4 + (TimestampBeat - TargetBeat);
 		if (!UseDiscreteMotion)
 		{
-			const float TimestampError = FMath::Abs(Timestamp.BeatFraction - BeatFraction);
+			const float TimestampError = FMath::Abs(TimestampBeatFraction - BeatFraction);
 			float SelectedFraction = BeatFraction;
 			
 			if (TimestampError > 0.9)		// Adjust for wrap-around of beat fraction on downbeat
@@ -91,7 +103,7 @@ void AExtendableEntity::Tick(float DeltaTime)
 			}
 			else if (TimestampError > 0.1)	// Adjust for potential desync when unpausing
 			{
-				SelectedFraction = Timestamp.BeatFraction;
+				SelectedFraction = TimestampBeatFraction;
 			}
 			
 			const float FractionComponent = 1 - FMath::Sqrt(1 - FMath::Pow(SelectedFraction, 2));

@@ -3,6 +3,7 @@
 
 #include "TrackGameMode.h"
 
+#include "StartBeat.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Quartz/AudioMixerClockHandle.h"
@@ -68,6 +69,17 @@ void ATrackGameMode::PlayAudioTrack()
 
 	FOnQuartzCommandEventBP CommandEvent = FOnQuartzCommandEventBP();
 	CommandEvent.BindUFunction(this, "OnAudioComponentQuantized");
+	
+	AActor* FoundStartBeat = UGameplayStatics::GetActorOfClass(World, AStartBeat::StaticClass());
+	if (FoundStartBeat)
+	{
+		const AStartBeat* StartBeatActor = Cast<AStartBeat>(FoundStartBeat);
+		this->StartBeat = StartBeatActor->StartBeat;
+	}
+	
+	StartTime = (60 / BeatsPerMinute) * (StartBeat - 1);
+	UE_LOG(LogTemp, Display, TEXT("Starting audio track at offset of: %f"), StartTime);
+	
 	AudioComponent->PlayQuantized(World, QuartzClock, TrackBoundary, CommandEvent, StartTime, FadeInDuration, FadeVolumeLevel, FaderCurve);
 
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle_StartDelay);
@@ -107,4 +119,16 @@ void ATrackGameMode::SetPaused(bool bPaused)
 		AudioComponent->SetPaused(bPaused);
 	}
 }
+
+void ATrackGameMode::GetCorrectedTimestamp(int32& Bars, int32& Beat, float& BeatFraction, float& Seconds) const
+{
+	const FQuartzTransportTimeStamp CurrentTimestamp = QuartzClock->GetCurrentTimestamp(GetWorld());
+
+	const int32 AdjustedBeat = CurrentTimestamp.Beat + StartBeat - 2;
+	Bars = CurrentTimestamp.Bars + (AdjustedBeat / 4);
+	Beat = AdjustedBeat % 4 + 1;
+	BeatFraction = CurrentTimestamp.BeatFraction;
+	Seconds = CurrentTimestamp.Seconds + StartTime;
+}
+
 

@@ -30,7 +30,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ReturnToOrigin();
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -38,13 +38,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UFUNCTION(BlueprintImplementableEvent)
-	void HandleCollider(EAccuracyType Accuracy, bool bIncreasesCombo);
+	void HandleCollider(EAccuracyType Accuracy, bool bDidIncreaseCombo, const FVector OverlapLocation);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetCurrentBeatOffset() const;
 
 	UFUNCTION()
-	void EvaluateTimingEvent(const TMap<EAccuracyType, int32>& AccuracyScoreModifiers, const TMap<EAccuracyType, int32>& AccuracyHealthModifiers, bool bIncreasesCombo);
+	void EvaluateTimingEvent(const TMap<EAccuracyType, int32>& AccuracyScoreModifiers, const TMap<EAccuracyType, int32>& AccuracyHealthModifiers, bool bIncreasesCombo, const FVector& OverlapLocation);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int32 GetScore() const;
@@ -56,7 +56,7 @@ public:
 	int32 GetCombo() const;
 
 	UFUNCTION(BlueprintCallable)
-	void IncreaseCombo();
+	bool IncreaseCombo();
 
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();

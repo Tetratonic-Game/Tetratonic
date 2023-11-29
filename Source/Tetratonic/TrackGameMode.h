@@ -40,6 +40,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetPaused(bool bPaused);
 
+	UPROPERTY(EditAnywhere)
+	int32 EntitySpeed = 100;
+	
+	UFUNCTION(BlueprintCallable)
+	void GetCorrectedTimestamp(int32& Bars, int32& Beat, float& BeatFraction, float& Seconds) const;
+
 private:
 	UPROPERTY(EditAnywhere)
 	USoundBase* AudioTrack;
@@ -47,14 +53,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float BeatsPerMinute = 120;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	int32 NumBeats = 4;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	EQuartzTimeSignatureQuantization BeatType = EQuartzTimeSignatureQuantization::QuarterNote;
-
-	UPROPERTY(EditAnywhere)
-	float StartTime = 0;
 
 	UPROPERTY(EditAnywhere)
 	float StartDelay = 0;
@@ -75,4 +78,8 @@ private:
 	void OnAudioComponentQuantized(EQuartzCommandDelegateSubType CommandType, FName Name);
 
 	FTimerHandle TimerHandle_StartDelay;
+
+	int32 StartBeat = 1;
+
+	float StartTime = 0;
 };

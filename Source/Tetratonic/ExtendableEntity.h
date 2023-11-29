@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TrackGameMode.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Quartz/AudioMixerClockHandle.h"
@@ -76,7 +77,7 @@ public:
 	float NumBeats = 4;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	int32 Speed = 100;
+	float Speed = 100;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool UseDiscreteMotion = false;
@@ -96,6 +97,9 @@ public:
 private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;
+
+	UPROPERTY()
+	ATrackGameMode* TrackGameMode;
 
 	FVector TargetPositionOffset;
 

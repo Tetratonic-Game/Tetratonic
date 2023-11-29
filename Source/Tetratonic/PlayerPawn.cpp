@@ -66,7 +66,11 @@ float APlayerPawn::GetCurrentBeatOffset() const
 	return (SelectedFraction > 0.5) ? 1 - SelectedFraction : SelectedFraction;
 }
 
-void APlayerPawn::EvaluateTimingEvent(const TMap<EAccuracyType, int32>& AccuracyScoreModifiers, const TMap<EAccuracyType, int32>& AccuracyHealthModifiers, bool bIncreasesCombo)
+void APlayerPawn::EvaluateTimingEvent(
+	const TMap<EAccuracyType, int32>& AccuracyScoreModifiers,
+	const TMap<EAccuracyType, int32>& AccuracyHealthModifiers,
+	bool bIncreasesCombo,
+	const FVector& OverlapLocation)
 {
 	const float BeatOffset = GetCurrentBeatOffset();
 
@@ -90,14 +94,14 @@ void APlayerPawn::EvaluateTimingEvent(const TMap<EAccuracyType, int32>& Accuracy
 	
 	AddToScore(AccuracyScoreModifiers[Accuracy]);
 	AddToHealth(AccuracyHealthModifiers[Accuracy]);
+	bool bDidIncreaseCombo = false;
 	if (bIncreasesCombo)
 	{
-		IncreaseCombo();
+		bDidIncreaseCombo = IncreaseCombo();
 	}
 
-	HandleCollider(Accuracy, bIncreasesCombo);
+	HandleCollider(Accuracy, bDidIncreaseCombo, OverlapLocation);
 }
-
 
 void APlayerPawn::DisplacePawn(const FVector NormalizedDirection)
 {
@@ -135,12 +139,14 @@ int32 APlayerPawn::GetCombo() const
 	return Combo;
 }
 
-void APlayerPawn::IncreaseCombo()
+bool APlayerPawn::IncreaseCombo()
 {
 	if (Combo < MaxCombo)
 	{
 		++Combo;
+		return true;
 	}
+	return false;
 }
 
 void APlayerPawn::ResetCombo()
