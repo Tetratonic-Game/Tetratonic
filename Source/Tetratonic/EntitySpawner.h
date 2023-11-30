@@ -60,6 +60,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SpawnEntities(int32 CurrentBeat);
 
+	UFUNCTION(BlueprintCallable)
+	TArray<FEntitySpawnParameters> GetEntitiesToSpawn(int32 CurrentBeat);
+
+	UFUNCTION(BlueprintCallable)
+	void SortEntities();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpawnEntity(TSubclassOf<AExtendableEntity> EntityClass, EEntityDirection EntityDirection, EEntityTarget TargetPosition, int32 TargetBeat, float NumBeats, float Speed);
 
@@ -69,13 +75,17 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<AExtendableEntity> PickupClass;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	int32 StartBeat = 1;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	float EntitySpeed = 100;
+
 private:
 	UPROPERTY(EditInstanceOnly)
 	TArray<FEntitySpawnParameters> EntitySpawns;
 
 	UPROPERTY(EditAnywhere)
 	int32 SpawnBeatOffset = 4;
-
-	float EntitySpeed = 100;
 	
 };

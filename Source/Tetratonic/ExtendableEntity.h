@@ -94,6 +94,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	UBoxComponent* SpannerCollisionComponent;
 
+	UFUNCTION(BlueprintCallable)
+	void SetLocationBasedOnBeat(const int32 CurrentBeat);
+
 private:
 	UPROPERTY()
 	UQuartzClockHandle* ClockHandle;

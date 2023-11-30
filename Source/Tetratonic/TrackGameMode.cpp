@@ -3,7 +3,7 @@
 
 #include "TrackGameMode.h"
 
-#include "StartBeat.h"
+#include "EntitySpawner.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Quartz/AudioMixerClockHandle.h"
@@ -25,6 +25,14 @@ void ATrackGameMode::StartPlay()
 	QuartzClock = QuartzSubsystem->CreateNewClock(this, FName("ConductorClock"), ClockSettings);
 	QuartzClock->SetBeatsPerMinute(World, QuantizationBoundary, FOnQuartzCommandEventBP(), QuartzClock, BeatsPerMinute);
 
+	TArray<AActor*> EntityActors = TArray<AActor*>();
+	UGameplayStatics::GetAllActorsOfClass(World, AExtendableEntity::StaticClass(), EntityActors);
+
+	for (const auto& Entity : EntityActors)
+	{
+		Entity->Destroy();
+	}
+	
 	Super::StartPlay();
 }
 
@@ -70,11 +78,11 @@ void ATrackGameMode::PlayAudioTrack()
 	FOnQuartzCommandEventBP CommandEvent = FOnQuartzCommandEventBP();
 	CommandEvent.BindUFunction(this, "OnAudioComponentQuantized");
 	
-	AActor* FoundStartBeat = UGameplayStatics::GetActorOfClass(World, AStartBeat::StaticClass());
-	if (FoundStartBeat)
+	AActor* FoundEntitySpawner = UGameplayStatics::GetActorOfClass(World, AEntitySpawner::StaticClass());
+	if (FoundEntitySpawner)
 	{
-		const AStartBeat* StartBeatActor = Cast<AStartBeat>(FoundStartBeat);
-		this->StartBeat = StartBeatActor->StartBeat;
+		const AEntitySpawner* EntitySpawnerActor = Cast<AEntitySpawner>(FoundEntitySpawner);
+		this->StartBeat = EntitySpawnerActor->StartBeat;
 	}
 	
 	StartTime = (60 / BeatsPerMinute) * (StartBeat - 1);
@@ -91,11 +99,6 @@ void ATrackGameMode::OnAudioComponentQuantized(EQuartzCommandDelegateSubType Com
 	{
 		QuartzClock->StartClock(GetWorld(), QuartzClock);
 	}
-}
-
-float ATrackGameMode::GetPlayfieldRadius() const
-{
-	return this->PlayfieldRadius;
 }
 
 void ATrackGameMode::SetPaused(bool bPaused)

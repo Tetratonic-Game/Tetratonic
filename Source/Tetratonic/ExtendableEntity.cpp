@@ -26,13 +26,15 @@ void AExtendableEntity::BeginPlay()
 {
 	Super::BeginPlay();
 
+	const FRotator TargetPositionRotator = FRotator(90 * static_cast<int>(TargetPosition), 0, 0);
+	TargetPositionOffset = static_cast<bool>(TargetPosition) * TargetPositionRotator.Vector() * 100;
+
 	TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode());
 	if (TrackGameMode)
 	{
 		ClockHandle = TrackGameMode->QuartzClock;
 
-		const FRotator TargetPositionRotator = FRotator(90 * static_cast<int>(TargetPosition), 0, 0);
-		TargetPositionOffset = static_cast<bool>(TargetPosition) * TargetPositionRotator.Vector() * TrackGameMode->GetPlayfieldRadius();
+		
 	}
 }
 
@@ -75,6 +77,7 @@ void AExtendableEntity::OnConstruction(const FTransform& Transform)
 	StartCapComponent->SetRelativeRotation(MovementRotator);
 }
 
+
 // Called every frame
 void AExtendableEntity::Tick(float DeltaTime)
 {
@@ -113,4 +116,13 @@ void AExtendableEntity::Tick(float DeltaTime)
 		SetActorLocation(GetActorForwardVector() * Speed * BeatOffset + TargetPositionOffset);
 	}
 }
+
+void AExtendableEntity::SetLocationBasedOnBeat(const int32 CurrentBeat)
+{
+	const float BeatOffset = CurrentBeat - TargetBeat;
+	const FRotator TargetPositionRotator = FRotator(90 * static_cast<int>(TargetPosition), 0, 0);
+	TargetPositionOffset = static_cast<bool>(TargetPosition) * TargetPositionRotator.Vector() * 100;
+	SetActorLocation(GetActorForwardVector() * Speed * BeatOffset + TargetPositionOffset);
+}
+
 

@@ -22,15 +22,6 @@ void AEntitySpawner::BeginPlay()
 	{
 		return Entity1.TargetBeat > Entity2.TargetBeat;
 	});
-
-	if (const ATrackGameMode* TrackGameMode = Cast<ATrackGameMode>(GetWorld()->GetAuthGameMode()))
-	{
-		EntitySpeed = TrackGameMode->EntitySpeed;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("EntitySpawner initialized without an active TrackGameMode, using default entity speed."));
-	}
 }
 
 // Called every frame
@@ -57,3 +48,30 @@ void AEntitySpawner::SpawnEntities(int32 CurrentBeat)
 			);
 	}
 }
+
+TArray<FEntitySpawnParameters> AEntitySpawner::GetEntitiesToSpawn(int32 CurrentBeat)
+{
+	TArray<FEntitySpawnParameters> EntitiesToSpawn = TArray<FEntitySpawnParameters>();
+	TArray<FEntitySpawnParameters> TempEntitySpawns = TArray<FEntitySpawnParameters>();
+	for (auto& Entity : EntitySpawns)
+	{
+		TempEntitySpawns.Add(Entity);
+	}
+	TempEntitySpawns.Sort();
+	
+	int32 SpawnIndex = 0;
+	while (SpawnIndex < EntitySpawns.Num() && EntitySpawns[SpawnIndex].TargetBeat <= CurrentBeat + SpawnBeatOffset)
+	{
+		EntitiesToSpawn.Add(EntitySpawns[SpawnIndex]);
+		SpawnIndex++;
+	}
+
+	return EntitiesToSpawn;
+}
+
+void AEntitySpawner::SortEntities()
+{
+	EntitySpawns.Sort();
+}
+
+
