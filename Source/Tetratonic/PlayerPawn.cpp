@@ -141,6 +141,13 @@ int32 APlayerPawn::GetCombo() const
 
 bool APlayerPawn::IncreaseCombo()
 {
+	++CurrentStreak;
+
+	if (CurrentStreak > LongestStreak)
+	{
+		LongestStreak = CurrentStreak;
+	}
+	
 	if (Combo < MaxCombo)
 	{
 		++Combo;
@@ -151,6 +158,7 @@ bool APlayerPawn::IncreaseCombo()
 
 void APlayerPawn::ResetCombo()
 {
+	CurrentStreak = 0;
 	Combo = 0;
 }
 
@@ -183,5 +191,16 @@ EEntityTarget APlayerPawn::GetCurrentPosition() const
 {
 	return CurrentPosition;
 }
+
+int32 APlayerPawn::GetCurrentStreak() const
+{
+	 return CurrentStreak;
+}
+
+int32 APlayerPawn::GetLongestStreak() const
+{
+	return LongestStreak;
+}
+
 
 
