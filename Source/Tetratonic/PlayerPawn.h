@@ -85,6 +85,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnFailure();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int32 GetCurrentStreak() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int32 GetLongestStreak() const;
+
 private:
 	UStaticMeshComponent* GetPlayerMesh() const;
 	
@@ -106,6 +112,10 @@ private:
 	EEntityTarget CurrentPosition = EEntityTarget::Center;
 	
 	int32 Score;
+
+	int32 CurrentStreak = 0;
+
+	int32 LongestStreak = 0;
 
 	int32 Combo;
 
