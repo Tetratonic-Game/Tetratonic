@@ -47,3 +47,7 @@ ManualIPAddress=
 [/Script/Engine.Engine]
 +ActiveGameNameRedirects=(OldGameName="/Script/Tonic", NewGameName="/Script/Tetratonic")
 
+[CoreRedirects]
++FunctionRedirects=(OldName="/Script/Tonic.PlayerPawn.DisplaceCharacter",NewName="/Script/Tetratonic.PlayerPawn.DisplacePawn")
++FunctionRedirects=(OldName="/Script/Tonic.PlayerPawn.DisplacePawn",NewName="/Script/Tetratonic.PlayerPawn.DisplacePawn")
+
