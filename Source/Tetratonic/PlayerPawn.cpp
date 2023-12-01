@@ -119,7 +119,8 @@ void APlayerPawn::ReturnToOrigin()
 
 UStaticMeshComponent* APlayerPawn::GetPlayerMesh() const
 {
-	UStaticMeshComponent* PlayerMesh = FindComponentByClass<UStaticMeshComponent>();
+	UActorComponent* ActorComponent = FindComponentByTag(UStaticMeshComponent::StaticClass(), FName("Player"));
+	UStaticMeshComponent* PlayerMesh = Cast<UStaticMeshComponent>(ActorComponent);
 	
 	return PlayerMesh;
 }
