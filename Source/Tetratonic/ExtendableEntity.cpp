@@ -33,8 +33,6 @@ void AExtendableEntity::BeginPlay()
 	if (TrackGameMode)
 	{
 		ClockHandle = TrackGameMode->QuartzClock;
-
-		
 	}
 }
 
