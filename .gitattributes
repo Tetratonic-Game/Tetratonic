@@ -1,3 +1,8 @@
 * text=auto
-
 Content/Tetratonic/Static/** filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/Textures filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/Audio filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/FX filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/Fonts filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/Materials filter=lfs diff=lfs merge=lfs -text
+Content/Tetratonic/Static/Meshes filter=lfs diff=lfs merge=lfs -text
