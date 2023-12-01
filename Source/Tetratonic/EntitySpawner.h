@@ -81,10 +81,10 @@ public:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
 	float EntitySpeed = 100;
 
-private:
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
 	TArray<FEntitySpawnParameters> EntitySpawns;
 
+private:
 	UPROPERTY(EditAnywhere)
 	int32 SpawnBeatOffset = 4;
 	
